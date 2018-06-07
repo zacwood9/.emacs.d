@@ -1,4 +1,4 @@
-;;;; init.el -- my barely workable emacs config
+;;;; init.el -- my slowly evolving emacs config :)
 
 ;;; Package config -- see https://melpa.org/#/getting-started
 (require 'package)
@@ -19,7 +19,7 @@
 
 ;;; Packages
 
-;;; Load path for manually installed packages
+;; Load path for manually installed packages
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
 (use-package exec-path-from-shell
@@ -98,16 +98,6 @@
 (use-package json-mode
   :ensure t)
 
-;; (defun setup-tide-mode ()
-;;   "Set up Tide mode."
-;;   (interactive)
-;;   (tide-setup)
-;;   (flycheck-mode +1)
-;;   (setq flycheck-check-syntax-automatically '(save-mode-enabled))
-;;   (eldoc-mode +1)
-;;   (tide-hl-identifier-mode +1)
-;;   (company-mode +1))
-
 (use-package tide
   :ensure t
   :mode(("\\.ts\\'" . typescript-mode))
@@ -129,10 +119,10 @@
 
 ;;; Custom functions
 
-;; quick function to open emacs config file
 (defun zac/edit-emacs-config ()
+  "Opens Emacs configuration file"
   (interactive)
-  (find-file "~/.emacs.d/init.el"))
+  (find-file user-init-file))
 
 ;; variables for use with org-babel sql
 (setq zac/sql-engine "postgresql"
