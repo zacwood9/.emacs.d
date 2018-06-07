@@ -31,7 +31,12 @@
 (use-package company
   :ensure t
   :init
-  (add-hook 'after-init-hook 'global-company-mode))
+  (add-hook 'after-init-hook 'global-company-mode)
+  :config
+  (setq company-dabbrev-downcase 0)
+  (setq company-idle-delay 0.1)
+  (setq company-minimum-prefix-length 1)
+  (setq company-tooltip-align-annotations t))
 
 (use-package helm
   :ensure t
@@ -74,36 +79,49 @@
                            "--stylelint-integration" "true"
                            )))
 
-(use-package js2-mode
+(use-package smartparens
   :ensure t
-  :config
-  (require 'prettier-js)
-  (add-hook 'js2-jsx-mode-hook 'prettier-js-mode))
+  :init
+  (smartparens-global-mode))
+
+(use-package js2-mode
+  :ensure t)
 
 (use-package rjsx-mode
   :ensure t
   :mode(("\\.js\\'" . rjsx-mode)
-	("\\.jsx\\'" . rjsx-mode)))
+	("\\.jsx\\'" . rjsx-mode))
+  :init
+  (add-hook 'rjsx-mode-hook 'prettier-js-mode)
+  (add-hook 'rjsx-mode-hook 'tide-mode))
 
 (use-package json-mode
   :ensure t)
 
-(defun setup-tide-mode ()
-  "Set up Tide mode."
-  (interactive)
+;; (defun setup-tide-mode ()
+;;   "Set up Tide mode."
+;;   (interactive)
+;;   (tide-setup)
+;;   (flycheck-mode +1)
+;;   (setq flycheck-check-syntax-automatically '(save-mode-enabled))
+;;   (eldoc-mode +1)
+;;   (tide-hl-identifier-mode +1)
+;;   (company-mode +1))
+
+(use-package tide
+  :ensure t
+  :mode(("\\.ts\\'" . typescript-mode))
+  :init
+  (add-hook 'typescript-mode-hook 'tide-mode)
+  (add-hook 'typescript-mode-hook 'prettier-js-mode)
+  :config
   (tide-setup)
   (flycheck-mode +1)
   (setq flycheck-check-syntax-automatically '(save-mode-enabled))
   (eldoc-mode +1)
   (tide-hl-identifier-mode +1)
   (company-mode +1))
-
-(use-package tide
-  :ensure t
-  :config
-  (setq company-tooltip-align-annotations t)
-  (add-hook 'typescript-mode-hook 'prettier-js-mode))
-
+  
 (use-package doom-themes
   :ensure t
   :preface (defvar region-fg nil) ; this prevents a weird bug with doom themes
@@ -142,16 +160,13 @@
   (interactive "sEndpoint: ")
   (with-current-buffer (url-retrieve-synchronously (format (concat zac/api-url "%s") url))
     (end-of-buffer)
-    (let ((json-string (thing-at-point 'line))
+    (let ((json-string (thing-at-point 'line)))
       (switch-to-buffer
        (generate-new-buffer (format "Pretty Endpoint %s" url)))
-      (insert json-string)
-      (json-pretty-print-buffer)
-      (beginning-of-buffer)
-      (json-mode)))))
-
-(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-(add-to-list 'default-frame-alist '(ns-appearance . dark))
+      (save-excursion
+	(insert json-string)
+	(json-pretty-print-buffer))
+      (json-mode))))
 
 (global-set-key (kbd "C-c o c") 'zac/edit-emacs-config)
 (global-set-key (kbd "C-\\") 'comment-or-uncomment-region)
@@ -188,10 +203,12 @@
 		    :family "Hack"
 		    :height 150)
 
-;; set meta to command key when on mac
+;; when on mac
 (when (eq system-type 'darwin)
-  (setq mac-command-modifier 'meta)
-  (setq mac-option-modifier nil))
+  (setq mac-command-modifier 'meta) ; set cmd to meta
+  (setq mac-option-modifier nil)
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)) ; configure title bar
+  (add-to-list 'default-frame-alist '(ns-appearance . 'nil)))
 
 ;; set my init filt to be this file
 (setq user-init-file "~/.emacs.d/init.el")
@@ -214,7 +231,7 @@
  '(jdee-db-spec-breakpoint-face-colors (cons "#191C25" "#434C5E"))
  '(package-selected-packages
    (quote
-    (json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
+    (smartparens company-tern json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
  '(vc-annotate-background "#3B4252")
  '(vc-annotate-color-map
    (list
