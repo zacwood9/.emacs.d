@@ -61,8 +61,6 @@
   :config
   (which-key-mode))
 
-;; prettier-js is not on MELPA -- load it manually
-(require 'prettier-js)
 (use-package prettier-js
   :ensure t
   :config
