@@ -95,9 +95,6 @@
   (add-hook 'rjsx-mode-hook 'prettier-js-mode)
   (add-hook 'rjsx-mode-hook 'tide-mode))
 
-(use-package json-mode
-  :ensure t)
-
 (use-package tide
   :ensure t
   :mode(("\\.ts\\'" . typescript-mode))
@@ -111,11 +108,17 @@
   (eldoc-mode +1)
   (tide-hl-identifier-mode +1)
   (company-mode +1))
+
+(use-package json-mode
+  :ensure t)
   
 (use-package doom-themes
   :ensure t
   :preface (defvar region-fg nil) ; this prevents a weird bug with doom themes
   :init (load-theme 'doom-one t))
+
+(use-package htmlize
+  :ensure t)
 
 ;;; Custom functions
 
@@ -133,6 +136,12 @@
   "Inserts a SQL src block with credentials for use in org buffers"
   (interactive)
   (insert (format "#+begin_src sql :engine %s :cmdline \"-U %s -d %s\"\n\n#+end_src" zac/sql-engine zac/sql-user zac/sql-database))
+  (previous-line))
+
+(defun zac/insert-elisp-block ()
+  "Inserts a SQL src block with credentials for use in org buffers"
+  (interactive)
+  (insert "#+begin_src emacs-lisp\n\n#+end_src")
   (previous-line))
 
 (defun zac/sql-query ()
@@ -160,6 +169,25 @@
 
 (global-set-key (kbd "C-c o c") 'zac/edit-emacs-config)
 (global-set-key (kbd "C-\\") 'comment-or-uncomment-region)
+
+;;; Projects
+
+;; zacwood.me Blog
+(setq org-publish-project-alist
+      '(("zacwood"
+         ;; Path to org files.
+         :base-directory "~/iCloud/Developer/zacwood9.github.io/_org"
+         :base-extension "org"
+
+         ;; Path to Jekyll Posts
+         :publishing-directory "~/iCloud/Developer/zacwood9.github.io/_posts"
+         :recursive t
+         :publishing-function org-html-publish-to-html
+         :headline-levels 4
+         :html-extension "html"
+         :body-only t
+         )))
+
 
 ;;; Customization
 
@@ -221,7 +249,7 @@
  '(jdee-db-spec-breakpoint-face-colors (cons "#191C25" "#434C5E"))
  '(package-selected-packages
    (quote
-    (smartparens company-tern json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
+    (htmlize smartparens company-tern json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
  '(vc-annotate-background "#3B4252")
  '(vc-annotate-color-map
    (list
