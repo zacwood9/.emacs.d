@@ -135,6 +135,10 @@
 (use-package yaml-mode
   :ensure t)
 
+(use-package emojify
+  :ensure t
+  :init(add-hook 'after-init-hook #'global-emojify-mode))
+
 ;;; Custom functions
 
 (defun zac/edit-emacs-config ()
@@ -251,7 +255,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (yaml-mode yard-mode robe which-key use-package tide smartparens rjsx-mode prettier-js magit json-mode htmlize helm-projectile exec-path-from-shell doom-themes company))))
+    (emojify yaml-mode yard-mode robe which-key use-package tide smartparens rjsx-mode prettier-js magit json-mode htmlize helm-projectile exec-path-from-shell doom-themes company))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
