@@ -111,6 +111,18 @@
 
 (use-package json-mode
   :ensure t)
+
+(use-package robe
+  :ensure t
+  :init
+  (add-hook 'ruby-mode-hook 'robe-mode)
+  :config
+  (push 'company-robe company-backends))
+
+(use-package yard-mode
+  :ensure t
+  :init
+  (add-hook 'ruby-mode-hook 'yard-mode))
   
 (use-package doom-themes
   :ensure t
@@ -194,8 +206,6 @@
 ;; add more languages for org-babel
 (org-babel-do-load-languages 'org-babel-load-languages '(
 							 (sql . t)
-							 (shell . t)
-							 (python . t)
 							 ))
 
 (scroll-bar-mode 0) ; no scroll bar
@@ -218,7 +228,7 @@
 
 ;; set font
 (set-face-attribute 'default nil
-		    :family "Hack"
+		    :family "Menlo"
 		    :height 150)
 
 ;; when on mac
@@ -236,42 +246,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
- '(custom-safe-themes
-   (quote
-    ("9d9fda57c476672acd8c6efeb9dc801abea906634575ad2c7688d055878e69d6" "b35a14c7d94c1f411890d45edfb9dc1bd61c5becd5c326790b51df6ebf60f402" default)))
- '(fci-rule-color "#4C566A")
- '(jdee-db-active-breakpoint-face-colors (cons "#191C25" "#80A0C2"))
- '(jdee-db-requested-breakpoint-face-colors (cons "#191C25" "#A2BF8A"))
- '(jdee-db-spec-breakpoint-face-colors (cons "#191C25" "#434C5E"))
  '(package-selected-packages
    (quote
-    (htmlize smartparens company-tern json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
- '(vc-annotate-background "#3B4252")
- '(vc-annotate-color-map
-   (list
-    (cons 20 "#A2BF8A")
-    (cons 40 "#bac389")
-    (cons 60 "#d3c788")
-    (cons 80 "#ECCC87")
-    (cons 100 "#e3b57e")
-    (cons 120 "#da9e75")
-    (cons 140 "#D2876D")
-    (cons 160 "#c88982")
-    (cons 180 "#be8b98")
-    (cons 200 "#B58DAE")
-    (cons 220 "#b97e97")
-    (cons 240 "#bd6f80")
-    (cons 260 "#C16069")
-    (cons 280 "#a15b66")
-    (cons 300 "#825663")
-    (cons 320 "#625160")
-    (cons 340 "#4C566A")
-    (cons 360 "#4C566A")))
- '(vc-annotate-very-old-color nil))
+    (yard-mode robe which-key use-package tide smartparens rjsx-mode prettier-js magit json-mode htmlize helm-projectile exec-path-from-shell doom-themes company))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
