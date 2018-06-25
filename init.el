@@ -35,8 +35,12 @@
   :config
   (setq company-dabbrev-downcase 0)
   (setq company-idle-delay 0.1)
-  (setq company-minimum-prefix-length 1)
-  (setq company-tooltip-align-annotations t))
+  (setq company-minimum-prefix-length 2)
+  (setq company-tooltip-align-annotations t)
+  (define-key company-active-map (kbd "M-n") nil)
+  (define-key company-active-map (kbd "M-p") nil)
+  (define-key company-active-map (kbd "C-n") #'company-select-next)
+  (define-key company-active-map (kbd "C-p") #'company-select-previous))
 
 (use-package helm
   :ensure t
@@ -71,7 +75,7 @@
   :config
   (setq prettier-js-args '(
                            "--trailing-comma" "es5"
-                           "--single-quote" "true"
+                           "--single-quote" "false"
                            "--print-width" "120"
                            "--tab-width" "4"
                            "--use-tabs" "false"
@@ -93,21 +97,19 @@
 	("\\.jsx\\'" . rjsx-mode))
   :init
   (add-hook 'rjsx-mode-hook 'prettier-js-mode)
-  (add-hook 'rjsx-mode-hook 'tide-mode))
+  (add-hook 'rjsx-mode-hook 'tide-setup))
+
 
 (use-package tide
   :ensure t
   :mode(("\\.ts\\'" . typescript-mode))
   :init
-  (add-hook 'typescript-mode-hook 'tide-mode)
+  (add-hook 'typescript-mode-hook 'tide-setup)
   (add-hook 'typescript-mode-hook 'prettier-js-mode)
-  :config
-  (tide-setup)
-  (flycheck-mode +1)
-  (setq flycheck-check-syntax-automatically '(save-mode-enabled))
-  (eldoc-mode +1)
-  (tide-hl-identifier-mode +1)
-  (company-mode +1))
+  (add-hook 'tide-mode-hook
+	    (lambda ()
+	      (flycheck-mode 1)
+	      (setq flycheck-check-syntax-automatically '(save mode-enabled)))))
 
 (use-package json-mode
   :ensure t)
@@ -135,30 +137,46 @@
 (use-package yaml-mode
   :ensure t)
 
-(use-package emojify
+(use-package docker
   :ensure t
-  :init(add-hook 'after-init-hook #'global-emojify-mode))
+  :init(docker-global-mode))
+
+(use-package gitignore-mode
+  :ensure t)
 
 ;;; Custom functions
 
 (defun zac/edit-emacs-config ()
-  "Opens Emacs configuration file"
+  "Opens Emacs configuration file."
   (interactive)
   (find-file user-init-file))
 
-;; variables for use with org-babel sql
-(setq zac/sql-engine "postgresql"
-      zac/sql-user "zacharywood"
-      zac/sql-database "zacharywood")
+(defvar zac/sql-engine "postgresql"
+  "SQL Engine for use in org-babel")
+(defvar zac/sql-user "zacharywood"
+  "User to login as when executing org-babel SQL queries")
+(defvar zac/sql-database "zacharywood"
+  "Database to use when executing org-babel SQL queries")
+(defvar zac/sql-host "localhost"
+  "Host to connect to when executing org-babel SQL queries")
+(defvar zac/sql-password ""
+  "Password to use when connecting for org-babel SQL queries")
+
+(if (file-exists-p "~/.emacs.d/sql-data.el") (load "~/.emacs.d/sql-data.el"))
 
 (defun zac/insert-sql-block ()
   "Inserts a SQL src block with credentials for use in org buffers"
   (interactive)
-  (insert (format "#+begin_src sql :engine %s :cmdline \"-U %s -d %s\"\n\n#+end_src" zac/sql-engine zac/sql-user zac/sql-database))
+  (insert (format "#+begin_src sql :engine %s :dbhost %s :dbuser %s :dbpassword %s :database %s \n\n#+end_src"
+		  zac/sql-engine
+		  zac/sql-host
+		  zac/sql-user
+		  zac/sql-password
+		  zac/sql-database))
   (previous-line))
 
 (defun zac/insert-elisp-block ()
-  "Inserts a SQL src block with credentials for use in org buffers"
+  "Inserts a emacs lisp src block for use in org buffers"
   (interactive)
   (insert "#+begin_src emacs-lisp\n\n#+end_src")
   (previous-line))
@@ -209,6 +227,18 @@
 
 
 ;;; Customization
+(global-linum-mode 1)
+
+;;; see: https://stackoverflow.com/questions/6837511/automatically-disable-a-global-minor-mode-for-a-specific-major-mode
+(defun zac/inhibit-global-linum-mode ()
+  "Counter-act `global-linum-mode'."
+  (add-hook 'after-change-major-mode-hook
+            (lambda () (linum-mode 0))
+            :append :local))
+
+;;; turn off linum-mode for certain modes
+(add-hook 'eshell-mode-hook 'zac/inhibit-global-linum-mode)
+(add-hook 'org-mode-hook 'zac/inhibit-global-linum-mode)
 
 ;; add more languages for org-babel
 (org-babel-do-load-languages 'org-babel-load-languages '(
@@ -235,7 +265,7 @@
 
 ;; set font
 (set-face-attribute 'default nil
-		    :family "Menlo"
+		    :family "Hack"
 		    :height 150)
 
 ;; when on mac
@@ -253,9 +283,42 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
+ '(custom-safe-themes
+   (quote
+    ("2c88b703cbe7ce802bf6f0bffe3edbb8d9ec68fc7557089d4eaa1e29f7529fe1" "fe666e5ac37c2dfcf80074e88b9252c71a22b6f5d2f566df9a7aa4f9bea55ef8" "ecba61c2239fbef776a72b65295b88e5534e458dfe3e6d7d9f9cb353448a569e" "3a3de615f80a0e8706208f0a71bbcc7cc3816988f971b6d237223b6731f91605" "9d9fda57c476672acd8c6efeb9dc801abea906634575ad2c7688d055878e69d6" "b35a14c7d94c1f411890d45edfb9dc1bd61c5becd5c326790b51df6ebf60f402" default)))
+ '(fci-rule-color "#4C566A")
+ '(jdee-db-active-breakpoint-face-colors (cons "#191C25" "#80A0C2"))
+ '(jdee-db-requested-breakpoint-face-colors (cons "#191C25" "#A2BF8A"))
+ '(jdee-db-spec-breakpoint-face-colors (cons "#191C25" "#434C5E"))
  '(package-selected-packages
    (quote
-    (emojify yaml-mode yard-mode robe which-key use-package tide smartparens rjsx-mode prettier-js magit json-mode htmlize helm-projectile exec-path-from-shell doom-themes company))))
+    (gitignore-mode dockerfile-mode docker markdown-mode emojify htmlize smartparens company-tern json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
+ '(vc-annotate-background "#3B4252")
+ '(vc-annotate-color-map
+   (list
+    (cons 20 "#A2BF8A")
+    (cons 40 "#bac389")
+    (cons 60 "#d3c788")
+    (cons 80 "#ECCC87")
+    (cons 100 "#e3b57e")
+    (cons 120 "#da9e75")
+    (cons 140 "#D2876D")
+    (cons 160 "#c88982")
+    (cons 180 "#be8b98")
+    (cons 200 "#B58DAE")
+    (cons 220 "#b97e97")
+    (cons 240 "#bd6f80")
+    (cons 260 "#C16069")
+    (cons 280 "#a15b66")
+    (cons 300 "#825663")
+    (cons 320 "#625160")
+    (cons 340 "#4C566A")
+    (cons 360 "#4C566A")))
+ '(vc-annotate-very-old-color nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
