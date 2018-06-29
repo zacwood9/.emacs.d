@@ -144,6 +144,9 @@
 (use-package gitignore-mode
   :ensure t)
 
+(use-package csv-mode
+  :ensure t)
+
 ;;; Custom functions
 
 (defun zac/edit-emacs-config ()
@@ -252,6 +255,7 @@
 (global-hl-line-mode 1) ; highlight current line
 (eldoc-mode 1) ; enable docs in minibuffer
 (setq inhibit-startup-screen 1) ; no start screen
+(delete-selection-mode 1)
 
 ;; store all backups in a single directory 
 (setq backup-directory-alist
@@ -296,7 +300,7 @@
  '(jdee-db-spec-breakpoint-face-colors (cons "#191C25" "#434C5E"))
  '(package-selected-packages
    (quote
-    (gitignore-mode dockerfile-mode docker markdown-mode emojify htmlize smartparens company-tern json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
+    (csv-mode gitignore-mode dockerfile-mode docker markdown-mode emojify htmlize smartparens company-tern json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
  '(vc-annotate-background "#3B4252")
  '(vc-annotate-color-map
    (list
