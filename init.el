@@ -30,6 +30,10 @@
 ;; Load path for manually installed packages
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
+(use-package xkcd
+  :ensure t
+  :init(xkcd))
+
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns x))
   :ensure t
@@ -50,28 +54,48 @@
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous))
 
-(use-package helm
+;; (use-package helm
+;;   :ensure t
+;;   :init
+;;   (require 'helm-config)
+;;   :config
+;;   (global-set-key (kbd "M-x") #'helm-M-x)
+;;   (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
+;;   (global-set-key (kbd "C-x C-f") #'helm-find-files)
+;;   (helm-mode 1))
+
+
+(use-package counsel
   :ensure t
   :init
-  (require 'helm-config)
-  :config
-  (global-set-key (kbd "M-x") #'helm-M-x)
-  (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
-  (global-set-key (kbd "C-x C-f") #'helm-find-files)
-  (helm-mode 1))
+  (counsel-mode 1)
+  (ivy-mode 1))
 
 (use-package projectile
   :ensure t
   :config
   (projectile-mode))
 
-(use-package helm-projectile
+(use-package counsel-projectile
   :ensure t
+  :init(counsel-projectile-mode 1)
   :config
-  (helm-projectile-on))
+  (global-set-key (kbd "C-s") 'swiper)
+  (setq ivy-re-builders-alist
+	'((t . ivy--regex-fuzzy))
+	ivy-display-style nil))
+
+;; (use-package helm-projectile
+;;   :ensure t
+;;   :config
+;;   (helm-projectile-on))
 
 (use-package magit
   :ensure t)
+
+(use-package magit-todos
+  :ensure t
+  :init(magit-todos-mode))
 
 (use-package which-key
   :ensure t
@@ -141,7 +165,7 @@
 (use-package doom-themes
   :ensure t
   :preface (defvar region-fg nil) ; this prevents a weird bug with doom themes
-  :init (load-theme 'doom-one t))
+  :init (load-theme 'doom-one-light t))
 
 (use-package htmlize
   :ensure t)
@@ -157,6 +181,35 @@
   :ensure t)
 
 (use-package csv-mode
+  :ensure t)
+
+(use-package smart-mode-line
+  :ensure t
+  :init
+  (setq sml/theme 'light)
+  (add-hook 'after-init-hook 'sml/setup))
+
+(use-package all-the-icons-dired
+  :ensure t
+  :init(add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+
+(use-package all-the-icons-ivy
+  :ensure t
+  :config
+  (all-the-icons-ivy-setup))
+
+(use-package discover
+  :ensure t
+  :init(global-discover-mode 1))
+
+(use-package esh-autosuggest
+  :hook (eshell-mode . esh-autosuggest-mode)
+  ;; If you have use-package-hook-name-suffix set to nil, uncomment and use the
+  ;; line below instead:
+  ;; :hook (eshell-mode-hook . esh-autosuggest-mode)
+  :ensure t)
+
+(use-package fireplace
   :ensure t)
 
 ;;; Custom functions
@@ -219,6 +272,7 @@
 	(json-pretty-print-buffer))
       (json-mode))))
 
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-c o c") 'zac/edit-emacs-config)
 (global-set-key (kbd "C-\\") 'comment-or-uncomment-region)
 
@@ -291,7 +345,7 @@
   (let ((col (current-column)))
     (save-excursion
       (transpose-lines 1))
-    (line-move -2)
+    (line-move -1)
     (move-to-column col)))
 
 (global-set-key (kbd "<C-S-down>") 'move-line-down)
@@ -339,6 +393,17 @@
         (goto-line (read-number "Goto line: ")))
     (linum-mode -1)))
 
+(defun zac/remapper-init ()
+  (interactive)
+  (let ((api-buffer (generate-new-buffer "api"))
+	(react-buffer (generate-new-buffer "react"))
+	(remapper-dir "~/Developer/remapper"))
+    (async-shell-command (format "cd %s && npm run dev" remapper-dir) api-buffer)
+    (async-shell-command (format "cd %s/web && npm start" remapper-dir) react-buffer)
+    (find-file (format "%s/TODOS.org" remapper-dir))
+    (delete-other-windows)))
+  
+
 ;;; Projects
 
 ;; zacwood.me Blog
@@ -360,6 +425,7 @@
 
 ;;; Customization
 ;; (global-linum-mode 1)
+(add-hook 'dired-mode-hook (lambda () (dired-hide-details-mode)))
 
 ;;; see: https://stackoverflow.com/questions/6837511/automatically-disable-a-global-minor-mode-for-a-specific-major-mode
 (defun zac/inhibit-global-linum-mode ()
@@ -421,14 +487,14 @@
    ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
  '(custom-safe-themes
    (quote
-    ("a566448baba25f48e1833d86807b77876a899fc0c3d33394094cf267c970749f" "93a0885d5f46d2aeac12bf6be1754faa7d5e28b27926b8aa812840fe7d0b7983" "2c88b703cbe7ce802bf6f0bffe3edbb8d9ec68fc7557089d4eaa1e29f7529fe1" "fe666e5ac37c2dfcf80074e88b9252c71a22b6f5d2f566df9a7aa4f9bea55ef8" "ecba61c2239fbef776a72b65295b88e5534e458dfe3e6d7d9f9cb353448a569e" "3a3de615f80a0e8706208f0a71bbcc7cc3816988f971b6d237223b6731f91605" "9d9fda57c476672acd8c6efeb9dc801abea906634575ad2c7688d055878e69d6" "b35a14c7d94c1f411890d45edfb9dc1bd61c5becd5c326790b51df6ebf60f402" default)))
+    ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "8891c81848a6cf203c7ac816436ea1a859c34038c39e3cf9f48292d8b1c86528" "5c72f78946231d45962c8cc2d054b0a437a9385982576d669c07c8e92afeff64" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "a566448baba25f48e1833d86807b77876a899fc0c3d33394094cf267c970749f" "93a0885d5f46d2aeac12bf6be1754faa7d5e28b27926b8aa812840fe7d0b7983" "2c88b703cbe7ce802bf6f0bffe3edbb8d9ec68fc7557089d4eaa1e29f7529fe1" "fe666e5ac37c2dfcf80074e88b9252c71a22b6f5d2f566df9a7aa4f9bea55ef8" "ecba61c2239fbef776a72b65295b88e5534e458dfe3e6d7d9f9cb353448a569e" "3a3de615f80a0e8706208f0a71bbcc7cc3816988f971b6d237223b6731f91605" "9d9fda57c476672acd8c6efeb9dc801abea906634575ad2c7688d055878e69d6" "b35a14c7d94c1f411890d45edfb9dc1bd61c5becd5c326790b51df6ebf60f402" default)))
  '(fci-rule-color "#4C566A")
  '(jdee-db-active-breakpoint-face-colors (cons "#191C25" "#80A0C2"))
  '(jdee-db-requested-breakpoint-face-colors (cons "#191C25" "#A2BF8A"))
  '(jdee-db-spec-breakpoint-face-colors (cons "#191C25" "#434C5E"))
  '(package-selected-packages
    (quote
-    (css-eldoc csv-mode gitignore-mode dockerfile-mode docker markdown-mode emojify htmlize smartparens company-tern json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
+    (magit-todos xkcd fireplace esh-autosuggest discover dired+ all-the-icons-ivy all-the-icons-dired counsel-projectile counsel ivy smart-mode-line css-eldoc csv-mode gitignore-mode dockerfile-mode docker markdown-mode emojify htmlize smartparens company-tern json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
  '(vc-annotate-background "#3B4252")
  '(vc-annotate-color-map
    (list
