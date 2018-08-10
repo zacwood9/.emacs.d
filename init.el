@@ -25,11 +25,13 @@
 (require 'init-ruby)
 (require 'init-looks)
 (require 'init-misc)
+(use-package restclient)
 (use-package yaml-mode)
 (use-package markdown-mode)
 (use-package json-mode)
 (use-package gitignore-mode)
 (use-package csv-mode)
+
 (require 'zac-sql)
 (require 'zac-misc)
 
@@ -55,7 +57,7 @@
  '(nyan-mode t)
  '(package-selected-packages
    (quote
-    (atom-dark-theme doom-modeline circadian neotree dired-sidebar latex-preview-pane counsel-dash 2048-game company-box magit-todos xkcd fireplace esh-autosuggest discover dired+ all-the-icons-ivy all-the-icons-dired counsel-projectile counsel ivy smart-mode-line css-eldoc csv-mode gitignore-mode dockerfile-mode docker markdown-mode emojify htmlize smartparens company-tern json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
+    (restclient atom-dark-theme doom-modeline circadian neotree dired-sidebar latex-preview-pane counsel-dash 2048-game company-box magit-todos xkcd fireplace esh-autosuggest discover dired+ all-the-icons-ivy all-the-icons-dired counsel-projectile counsel ivy smart-mode-line css-eldoc csv-mode gitignore-mode dockerfile-mode docker markdown-mode emojify htmlize smartparens company-tern json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
  '(vc-annotate-background "#3B4252")
  '(vc-annotate-color-map
    (list
