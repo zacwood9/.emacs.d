@@ -12,10 +12,10 @@
 (use-package docker
   :bind ("C-c d" . docker))
 
-(use-package smart-mode-line
-  :init
-  (setq sml/theme 'light)
-  (add-hook 'after-init-hook 'sml/setup))
+;; (use-package smart-mode-line
+;;   :init
+;;   (setq sml/theme 'light)
+;;   (add-hook 'after-init-hook 'sml/setup))
 
 (use-package all-the-icons-dired
   :init(add-hook 'dired-mode-hook 'all-the-icons-dired-mode))

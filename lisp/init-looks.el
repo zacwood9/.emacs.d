@@ -2,6 +2,11 @@
     :preface (defvar region-fg nil) ; this prevents a weird bug with doom themes
     :init (load-theme 'doom-one-light t))
 
+(use-package doom-modeline
+      :ensure t
+      :defer t
+      :hook (after-init . doom-modeline-init))
+
 (use-package circadian
   :config
   (setq circadian-themes '(("7:00" . doom-one-light)
