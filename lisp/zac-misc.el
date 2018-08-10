@@ -138,6 +138,7 @@
 
 (windmove-default-keybindings)
 (global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "M-O") 'other-frame)
 
 (show-paren-mode 1) ; visualize matching parenthesees
 (global-hl-line-mode 1) ; highlight current line
