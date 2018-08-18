@@ -34,8 +34,4 @@
   ;; :hook (eshell-mode-hook . esh-autosuggest-mode)
   )
 
-(use-package htmlize)
-(use-package fireplace)
-(use-package xkcd)
-
 (provide 'init-misc)

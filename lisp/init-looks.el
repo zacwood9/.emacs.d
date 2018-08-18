@@ -1,20 +1,17 @@
 (use-package doom-themes
     :preface (defvar region-fg nil) ; this prevents a weird bug with doom themes
-    :init (load-theme 'doom-one-light t))
+    :init (load-theme 'doom-one t))
 
 (use-package doom-modeline
       :ensure t
       :defer t
       :hook (after-init . doom-modeline-init))
 
-(use-package circadian
-  :config
-  (setq circadian-themes '(("7:00" . doom-solarized-light)
-			   ("19:00" . doom-one)))
-  (circadian-setup))
-
-(use-package nyan-mode
-  :init (nyan-mode))
+;; (use-package circadian
+;;   :config
+;;   (setq circadian-themes '(("7:00" . doom-solarized-light)
+;; 			   ("19:00" . doom-one)))
+;;   (circadian-setup))
 
 ;; Turn off mouse interface early in startup to avoid momentary display
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))

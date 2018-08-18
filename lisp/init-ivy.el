@@ -3,7 +3,8 @@
   (counsel-mode 1)
   (ivy-mode 1)
   :config
-  (global-set-key (kbd "C-s") 'swiper))
+  (global-set-key (kbd "C-s") 'swiper)
+  (setq ivy-use-selectable-prompt t))
 
 (use-package counsel-projectile
   :init(counsel-projectile-mode 1)

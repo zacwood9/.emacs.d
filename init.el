@@ -19,12 +19,21 @@
 (require 'init-ivy)
 (require 'init-magit)
 (require 'init-flycheck)
+(require 'init-lsp)
 (require 'init-dired)
 (require 'init-org)
 (require 'init-js)
 (require 'init-ruby)
+(require 'init-go)
 (require 'init-looks)
 (require 'init-misc)
+(use-package dockerfile-mode)
+(use-package latex-preview-pane
+  :config
+  (latex-preview-pane-enable))
+(use-package htmlize)
+(use-package fireplace)
+(use-package xkcd)
 (use-package restclient)
 (use-package yaml-mode)
 (use-package markdown-mode)
@@ -54,10 +63,9 @@
  '(jdee-db-active-breakpoint-face-colors (cons "#191C25" "#80A0C2"))
  '(jdee-db-requested-breakpoint-face-colors (cons "#191C25" "#A2BF8A"))
  '(jdee-db-spec-breakpoint-face-colors (cons "#191C25" "#434C5E"))
- '(nyan-mode t)
  '(package-selected-packages
    (quote
-    (restclient atom-dark-theme doom-modeline circadian neotree dired-sidebar latex-preview-pane counsel-dash 2048-game company-box magit-todos xkcd fireplace esh-autosuggest discover dired+ all-the-icons-ivy all-the-icons-dired counsel-projectile counsel ivy smart-mode-line css-eldoc csv-mode gitignore-mode dockerfile-mode docker markdown-mode emojify htmlize smartparens company-tern json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
+    (lsp-mode lsp-java web-mode flycheck-gometalinter company-go go-mode restclient atom-dark-theme doom-modeline circadian neotree dired-sidebar latex-preview-pane counsel-dash 2048-game company-box magit-todos xkcd fireplace esh-autosuggest discover dired+ all-the-icons-ivy all-the-icons-dired counsel-projectile counsel ivy smart-mode-line css-eldoc csv-mode gitignore-mode dockerfile-mode docker markdown-mode emojify htmlize smartparens company-tern json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
  '(vc-annotate-background "#3B4252")
  '(vc-annotate-color-map
    (list
