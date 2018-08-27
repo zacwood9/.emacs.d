@@ -3,9 +3,12 @@
     :init (load-theme 'doom-one t))
 
 (use-package doom-modeline
-      :ensure t
       :defer t
-      :hook (after-init . doom-modeline-init))
+      :init
+      (add-hook 'after-init-hook
+		(lambda ()
+		  (setq doom-modeline-height 40)
+		  (doom-modeline-init))))
 
 ;; (use-package circadian
 ;;   :config

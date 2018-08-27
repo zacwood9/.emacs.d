@@ -14,7 +14,7 @@
          :body-only t
          )))
 
-
+(setq org-export-show-temporary-export-buffer nil)
 
 (defun zac/export-zacwood-md-pages ()
   (interactive)
@@ -31,8 +31,6 @@
   (interactive)
   (zac/export-zacwood-md-pages)
   (org-publish-project "zacwood.me/posts"))
-
-(defvar zac/blog-post-header)
 
 (setq zac/blog-post-header "#+OPTIONS: toc:nil num:nil\n#+BEGIN_EXPORT html\n---\nlayout: post\ntitle: \nsubtitle: \ntags: \n---\n#+END_EXPORT\n\n")
 
@@ -51,5 +49,7 @@
 (org-babel-do-load-languages 'org-babel-load-languages '(
 							 (sql . t)
 							 ))
+
+(add-hook 'org-mode-hook #'visual-line-mode)
 
 (provide 'init-org)

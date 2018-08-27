@@ -28,9 +28,6 @@
 (require 'init-looks)
 (require 'init-misc)
 (use-package dockerfile-mode)
-(use-package latex-preview-pane
-  :config
-  (latex-preview-pane-enable))
 (use-package htmlize)
 (use-package fireplace)
 (use-package xkcd)
