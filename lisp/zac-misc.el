@@ -3,30 +3,16 @@
   (interactive)
   (find-file user-init-file))
 
-;; url to use with pretty-print-endpoint
-(setq zac/api-url "http://localhost:3001/")
-
 (defun zac/new-restclient-buffer ()
   (interactive)
   (switch-to-buffer (generate-new-buffer "restclient"))
   (restclient-mode))
 
-;; -(defun zac/pretty-print-endpoint (url)
-;; -  "Prints formatted JSON from a given endpoint in a new buffer."
-;; -  (interactive "sEndpoint: ")
-;; -  (with-current-buffer (url-retrieve-synchronously (format (concat zac/api-url "%s") url))
-;; -    (end-of-buffer)
-;; -    (let ((json-string (thing-at-point 'line)))
-;; -      (switch-to-buffer
-;; -       (generate-new-buffer (format "Pretty Endpoint %s" url)))
-;; -      (save-excursion
-;; -	(insert json-string)
-;; -	(json-pretty-print-buffer))
-;; -      (json-mode))))
-
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-c o c") 'zac/edit-emacs-config)
 (global-set-key (kbd "C-c o r") 'zac/new-restclient-buffer)
+(global-set-key (kbd "C-c o a") 'org-agenda)
+(global-set-key (kbd "C-c o s") 'ansi-term)
 (global-set-key (kbd "C-\\") 'comment-or-uncomment-region)
 
 ;; Move more quickly
@@ -131,6 +117,12 @@
         (linum-mode 1)
         (goto-line (read-number "Goto line: ")))
     (linum-mode -1)))
+
+(defun zac/insert-js-comment ()
+  (interactive)
+  (insert "/**\n */")
+  (previous-line)
+  (web-mode-comment-indent-new-line))
 
 (defun zac/remapper-init ()
   (interactive)

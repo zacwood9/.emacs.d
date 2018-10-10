@@ -1,5 +1,6 @@
 (use-package go-mode
   :config
+  (setq zac/env-to-copy (append zac/env-to-copy '("GOPATH" "GOBIN" "GITLAB_TOKEN")))
   (setenv "GOPATH" "/Users/zac/Developer/go")
   (setq gofmt-command "goimports")
   (add-hook 'before-save-hook 'gofmt-before-save)

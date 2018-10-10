@@ -8,7 +8,7 @@
   :after company
   :ensure t
   :config
-  (add-hook 'java-mode-hook (lambda () (push 'company-lsp company-backends)))
+  ;; (add-hook 'java-mode-hook (lambda () (push 'company-lsp company-backends)))
   (setq company-lsp-enable-snippet t
         company-lsp-cache-candidates t))
 
@@ -30,6 +30,8 @@
   (add-hook 'java-mode-hook  'company-mode)
   (add-hook 'java-mode-hook  (lambda () (lsp-ui-flycheck-enable t)))
   (add-hook 'java-mode-hook  'lsp-ui-sideline-mode))
+
+;; (use-package eglot)
 
 
 (provide 'init-lsp)

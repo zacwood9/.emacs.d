@@ -7,8 +7,16 @@
       :init
       (add-hook 'after-init-hook
 		(lambda ()
-		  (setq doom-modeline-height 40)
+		  (setq doom-modeline-height 35)
 		  (doom-modeline-init))))
+
+(use-package dashboard
+  :config
+  (dashboard-setup-startup-hook)
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+  (setq dashboard-banner-logo-title "Welcome, Zac!")
+  ;; (setq show-week-agenda-p t)
+  (setq dashboard-items '((agenda . 5))))
 
 ;; (use-package circadian
 ;;   :config

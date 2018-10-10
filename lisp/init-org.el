@@ -1,6 +1,6 @@
 ;; zacwood.me Blog
 (setq org-publish-project-alist
-      '(("zacwood.me/posts"
+      '(("zacwood.me.posts"
          ;; Path to org files.
          :base-directory "~/Developer/zacwood9.github.io/_org/posts"
          :base-extension "org"
@@ -19,8 +19,10 @@
 (defun zac/export-zacwood-md-pages ()
   (interactive)
   (let* ((project-dir "~/Developer/zacwood9.github.io/")
-	(pages-dir (concat project-dir "_org/pages/")))
-    (dolist (file (directory-files pages-dir))
+	 (pages-dir (concat project-dir "_org/pages/"))
+	 (files (directory-files pages-dir)))
+    (dolist (file files)
+      (message file)
       (let ((file-path (concat pages-dir file)))
 	(if (string-suffix-p ".org" file-path)
 	    (with-current-buffer (find-file-noselect file-path)
@@ -30,7 +32,7 @@
 (defun zac/publish-zacwood-me ()
   (interactive)
   (zac/export-zacwood-md-pages)
-  (org-publish-project "zacwood.me/posts"))
+  (org-publish-project "zacwood.me.posts"))
 
 (setq zac/blog-post-header "#+OPTIONS: toc:nil num:nil\n#+BEGIN_EXPORT html\n---\nlayout: post\ntitle: \nsubtitle: \ntags: \n---\n#+END_EXPORT\n\n")
 
@@ -51,5 +53,21 @@
 							 ))
 
 (add-hook 'org-mode-hook #'visual-line-mode)
+
+(defun zac/open-todos ()
+  (interactive)
+  (find-file "~/iCloud/Documents/org/todos.org"))
+
+(cl-defmacro zac/dodir ((file dirname) &rest body)
+  `(dolist (,file (directory-files ,dirname))
+     ,@body))
+
+(dolist (file (directory-files "~/Developer/SRCT/schedules"))
+  (print file))
+
+(global-set-key (kbd "C-c o t") #'zac/open-todos)
+
+(use-package org-bullets
+  :config (add-hook 'org-mode-hook 'org-bullets-mode))
 
 (provide 'init-org)
