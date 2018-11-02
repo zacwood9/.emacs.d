@@ -70,4 +70,10 @@
 (use-package org-bullets
   :config (add-hook 'org-mode-hook 'org-bullets-mode))
 
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)))
+
+(setq org-babel-python-command "python3")
+
 (provide 'init-org)

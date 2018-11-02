@@ -18,6 +18,10 @@
   ;; (setq show-week-agenda-p t)
   (setq dashboard-items '((agenda . 5))))
 
+;; (use-package darkroom
+;;   (darkroom-tentative-mode)
+;;   (add-hook 'org-mode-hook 'darkroom-tentative-mode))
+
 ;; (use-package circadian
 ;;   :config
 ;;   (setq circadian-themes '(("7:00" . doom-solarized-light)

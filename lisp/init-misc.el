@@ -1,3 +1,5 @@
+(use-package eyebrowse)
+
 (use-package which-key
   :init
   (which-key-mode))
@@ -22,9 +24,10 @@
 (use-package discover
   :init(global-discover-mode 1))
 
-(use-package latex-preview-pane
-  :config
-  (latex-preview-pane-enable))
+;; (use-package latex-preview-pane
+;;   :config
+;;   (latex-preview-pane-enable)
+;;   )
 
 (use-package dimmer
   :config (dimmer-mode))
