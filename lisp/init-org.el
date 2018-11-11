@@ -16,6 +16,7 @@
 
 (setq org-export-show-temporary-export-buffer nil)
 
+
 (defun zac/export-zacwood-md-pages ()
   (interactive)
   (let* ((project-dir "~/Developer/zacwood9.github.io/")
@@ -34,7 +35,8 @@
   (zac/export-zacwood-md-pages)
   (org-publish-project "zacwood.me.posts"))
 
-(setq zac/blog-post-header "#+OPTIONS: toc:nil num:nil\n#+BEGIN_EXPORT html\n---\nlayout: post\ntitle: \nsubtitle: \ntags: \n---\n#+END_EXPORT\n\n")
+
+(setq zac/blog-post-header "#+OPTIONS: toc:nil num:nil\n#+BEGIN_EXPORT html\n---\nlayout: post\ntitle: \ntags: \ncategory: \n---\n#+END_EXPORT\n\n\n\n#+BEGIN_EXPORT html\n<!--description-->\n#+END_EXPORT\n")
 
 (defun zac/new-blog-post (name)
   (interactive "sPost name: ")
@@ -75,5 +77,6 @@
  '((python . t)))
 
 (setq org-babel-python-command "python3")
+(setq org-agenda-start-on-weekday nil)
 
 (provide 'init-org)

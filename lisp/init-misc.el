@@ -1,4 +1,6 @@
-(use-package eyebrowse)
+(use-package eyebrowse
+  :config
+  (eyebrowse-mode))
 
 (use-package which-key
   :init

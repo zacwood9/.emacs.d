@@ -35,13 +35,6 @@
 (use-package json-mode)
 (use-package gitignore-mode)
 (use-package csv-mode)
-(setq projectile-mode-line "Projectile")
-(setq remote-file-name-inhibit-cache nil)
-(setq vc-ignore-dir-regexp
-      (format "%s\\|%s"
-                    vc-ignore-dir-regexp
-                    tramp-file-name-regexp))
-(setq tramp-verbose 1)
 (require 'zac-sql)
 (require 'zac-misc)
 
@@ -72,7 +65,7 @@
     ("~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/todos.org")))
  '(package-selected-packages
    (quote
-    (eyebrowse darkroom cmake-mode ivy-rtags company-rtags company-irony-c-headers cquery emacs-cquery company-irony dashboard irony yasnippet-snippets yasnippit yasnippet ranger enh-ruby-mode pdf-tools projectile-rails eglot swift-mode dimmer org-bullets rubocop slime rvm lsp-ruby lsp-mode lsp-java web-mode flycheck-gometalinter company-go go-mode restclient atom-dark-theme doom-modeline circadian neotree dired-sidebar latex-preview-pane counsel-dash 2048-game company-box magit-todos xkcd fireplace esh-autosuggest discover dired+ all-the-icons-ivy all-the-icons-dired counsel-projectile counsel ivy smart-mode-line css-eldoc csv-mode gitignore-mode dockerfile-mode docker markdown-mode emojify htmlize smartparens company-tern json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
+    (ox-pandoc eyebrowse darkroom cmake-mode ivy-rtags company-rtags company-irony-c-headers cquery emacs-cquery company-irony dashboard irony yasnippet-snippets yasnippit yasnippet ranger enh-ruby-mode pdf-tools projectile-rails eglot swift-mode dimmer org-bullets rubocop slime rvm lsp-ruby lsp-mode lsp-java web-mode flycheck-gometalinter company-go go-mode restclient atom-dark-theme doom-modeline circadian neotree dired-sidebar latex-preview-pane counsel-dash 2048-game company-box magit-todos xkcd fireplace esh-autosuggest discover dired+ all-the-icons-ivy all-the-icons-dired counsel-projectile counsel ivy smart-mode-line css-eldoc csv-mode gitignore-mode dockerfile-mode docker markdown-mode emojify htmlize smartparens company-tern json-mode nyan-mode doom-themes prettier-js rjsx-mode js2-mode exec-path-from-shell tide helm-projectile magit which-key projectile helm company use-package)))
  '(vc-annotate-background "#282c34")
  '(vc-annotate-color-map
    (list

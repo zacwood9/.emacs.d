@@ -6,6 +6,7 @@
 (defun zac/new-restclient-buffer ()
   (interactive)
   (switch-to-buffer (generate-new-buffer "restclient"))
+  (setq restclient-same-buffer-response t)
   (restclient-mode))
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
