@@ -19,6 +19,7 @@
   (setq-local flycheck-check-syntax-automatically nil))
 ;; c-mode-common-hook is also called by c++-mode
 (add-hook 'c-mode-common-hook #'my-flycheck-rtags-setup)
+(add-hook 'c-mode-common-hook (lambda () (local-set-key (kbd "C-c c") 'compile)))
 
 (use-package irony
   :config
@@ -50,5 +51,6 @@
   (cmake-ide-setup))
 
 (setq c-default-style "k&r")
+
 
 (provide 'init-c)

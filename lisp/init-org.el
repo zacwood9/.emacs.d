@@ -64,9 +64,6 @@
   `(dolist (,file (directory-files ,dirname))
      ,@body))
 
-(dolist (file (directory-files "~/Developer/SRCT/schedules"))
-  (print file))
-
 (global-set-key (kbd "C-c o t") #'zac/open-todos)
 
 (use-package org-bullets

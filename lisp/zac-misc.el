@@ -5,8 +5,7 @@
 
 (defun zac/new-restclient-buffer ()
   (interactive)
-  (switch-to-buffer (generate-new-buffer "restclient"))
-  (setq restclient-same-buffer-response t)
+  (switch-to-buffer (generate-new-buffer "restclient"))  
   (restclient-mode))
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -69,7 +68,23 @@
           (message "File '%s' successfully renamed to '%s'"
                    name (file-name-nondirectory new-name)))))))
 
+(defun copy-current-buffer-file ()
+  "Copies file it is visiting."
+  (interactive)
+  (let ((name (buffer-name))
+        (filename (buffer-file-name)))
+    (if (not (and filename (file-exists-p filename)))
+        (error "Buffer '%s' is not visiting a file!" name)
+      (let ((new-name (read-file-name "Copy to: " filename)))
+        (if (get-buffer new-name)
+            (error "A buffer named '%s' already exists!" new-name)
+          (copy-file filename new-name 1)
+	  (find-file new-name)
+          (message "File '%s' successfully copied to '%s'"
+                   name (file-name-nondirectory new-name)))))))
+
 (global-set-key (kbd "C-x C-r") 'rename-current-buffer-file)
+(global-set-key (kbd "C-x C-y") 'copy-current-buffer-file)
 
 (defun move-line-down ()
   (interactive)

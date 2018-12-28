@@ -28,8 +28,7 @@
 
 ;; (use-package latex-preview-pane
 ;;   :config
-;;   (latex-preview-pane-enable)
-;;   )
+;;   (latex-preview-pane-enable))
 
 (use-package dimmer
   :config (dimmer-mode))
@@ -46,16 +45,9 @@
 
 (use-package yasnippet-snippets)
 
-;; (defun cquery//enable ()
-;;   (condition-case nil
-;;       (lsp-cquery-enable)
-;;     (user-error nil)))
-
-;; (use-package cquery
-;;   :config
-;;   (setq cquery-executable "/usr/local/Cellar/cquery/20180718/bin/cquery")
-;;   (add-hook 'c-mode-hook #'cquery//enable)
-;;   (add-hook 'c++-mode-hook #'cquery//enable))
+(use-package restclient
+  :config
+  (setq restclient-same-buffer-response t))
 
 (setq python-shell-interpreter "/usr/local/bin/python3")
 (setq tramp-default-method "ssh")
