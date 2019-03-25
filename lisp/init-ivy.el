@@ -13,4 +13,6 @@
   	'((t . ivy--regex-fuzzy))
   	ivy-display-style nil))
 
+(use-package smex)
+
 (provide 'init-ivy)

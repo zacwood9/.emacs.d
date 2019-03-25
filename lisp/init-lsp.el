@@ -31,7 +31,10 @@
 ;;   (add-hook 'java-mode-hook  (lambda () (lsp-ui-flycheck-enable t)))
 ;;   (add-hook 'java-mode-hook  'lsp-ui-sideline-mode))
 
-(use-package eglot)
+;;(use-package eglot)
 
+(use-package lsp-mode)
+(use-package company-lsp)
+;(use-package lsp-ui)
 
 (provide 'init-lsp)

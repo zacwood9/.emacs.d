@@ -1,3 +1,5 @@
+(defconst *is-a-mac* (eq system-type 'darwin))
+
 (defun zac/edit-emacs-config ()
   "Opens Emacs configuration file."
   (interactive)
@@ -8,12 +10,26 @@
   (switch-to-buffer (generate-new-buffer "restclient"))  
   (restclient-mode))
 
+(defun zac/dired-new-eyeframe (dir)
+  (interactive "DOpen Directory in new Eyeframe: ")
+  (eyebrowse-create-window-config)
+  (delete-other-windows)
+  (dired dir))
+
+(defun zac/find-file-new-eyeframe (file)
+  (interactive "FFind file in new Eyeframe: ")
+  (eyebrowse-create-window-config)
+  (delete-other-windows)
+  (find-file file))
+
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-c o c") 'zac/edit-emacs-config)
 (global-set-key (kbd "C-c o r") 'zac/new-restclient-buffer)
 (global-set-key (kbd "C-c o a") 'org-agenda)
 (global-set-key (kbd "C-c o s") 'ansi-term)
 (global-set-key (kbd "C-\\") 'comment-or-uncomment-region)
+(global-set-key (kbd "C-c C-w C-d") 'zac/dired-new-eyeframe)
+(global-set-key (kbd "C-c C-w C-f") 'zac/find-file-new-eyeframe)
 
 ;; Move more quickly
 (global-set-key (kbd "C-S-n")
@@ -98,14 +114,12 @@
 (defun move-line-up ()
   (interactive)
   (let ((col (current-column)))
-    (save-excursion
-      (transpose-lines 1))
-    (line-move -1)
+    (transpose-lines 1)
+    (forward-line -2)
     (move-to-column col)))
 
-
-(global-set-key (kbd "<C-S-down>") 'move-line-down)
 (global-set-key (kbd "<C-S-up>") 'move-line-up)
+(global-set-key (kbd "<C-S-down>") 'move-line-down)
 
 (defun open-line-below ()
   (interactive)
@@ -140,16 +154,6 @@
   (previous-line)
   (web-mode-comment-indent-new-line))
 
-(defun zac/remapper-init ()
-  (interactive)
-  (let ((api-buffer (generate-new-buffer "api"))
-	(react-buffer (generate-new-buffer "react"))
-	(remapper-dir "~/Developer/remapper"))
-    (async-shell-command (format "cd %s && npm run dev" remapper-dir) api-buffer)
-    (async-shell-command (format "cd %s/web && npm start" remapper-dir) react-buffer)
-    (dired remapper-dir)
-    (delete-other-windows)))
-
 (windmove-default-keybindings)
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "M-O") 'other-frame)
@@ -170,10 +174,66 @@
 (setq ring-bell-function 'ignore)
 
 ;; when on mac
-(when (eq system-type 'darwin)
+(when *is-a-mac*
   (setq mac-command-modifier 'meta) ; set cmd to meta
   (setq mac-option-modifier nil)
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)) ; configure title bar
-  (add-to-list 'default-frame-alist '(ns-appearance . 'nil)))
+  (add-to-list 'default-frame-alist '(ns-appearance . 'nil))
+  (defun zac/open-file ()
+    "Opens a file using the macOS \"open\" command."
+    (interactive)
+    (shell-command (concat "open " (shell-quote-argument (buffer-file-name))))))
+
+(defun zac/print ()
+  (interactive)
+  (ivy-read
+   "Choose printer: "
+   (zac//printers)
+   :action (lambda (printer)
+	     (print printer))))
+
+(defun zac//printers ()
+  (delete nil (mapcar
+   (lambda (str)
+     (let ((split (split-string str " ")))
+       (if (equal "printer" (first split))
+	   (concat (second split) " " (string-remove-suffix "." (fourth split))))))
+   (split-string (shell-command-to-string "/usr/bin/lpstat -p -d") "\n" t))))
+
+(defun zac/list-printers ()
+  (interactive)
+  (switch-to-buffer (generate-new-buffer "printers"))
+  (insert (string-join (zac//printers) "\n"))
+  (view-mode))
+
+(defvar zac/downloads-directory (expand-file-name "~/Downloads/"))
+
+(defun zac/move-from-downloads ()
+  "Moves a file from ~/Downloads to the current directory"
+  (interactive)
+  (let ((current-directory default-directory)
+	(default-directory zac/downloads-directory))
+    (call-interactively 'zac//move-from-downloads-helper)))
+
+(defun zac//move-from-downloads-helper (file)
+  (interactive "FChoose file: ")
+  (rename-file file (concat current-directory (file-name-nondirectory file))))
+
+(defun read-lines (file-path)
+  (with-temp-buffer
+    (insert-file-contents file-path)
+    (split-string (buffer-string) "\n" t)))
+
+(defun lines-matching-p (regexp lines)
+  (delete nil
+	  (mapcar (lambda (line)
+		    (if (string-match-p regexp line)
+			line))
+		  lines)))
+
+(defun zac/copy-file-name ()
+  (interactive)
+  (shell-command (concat "echo -n '" buffer-file-name "' | pbcopy")))
+
 
 (provide 'zac-misc)

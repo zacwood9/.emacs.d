@@ -45,4 +45,6 @@
                            "--jsx-bracket-same-line" "true"
                            )))
 
+(use-package vue-mode)
+
 (provide 'init-js)

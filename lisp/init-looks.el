@@ -1,6 +1,6 @@
 (use-package doom-themes
     :preface (defvar region-fg nil) ; this prevents a weird bug with doom themes
-    :init (load-theme 'doom-one t))
+    :init (load-theme 'doom-one-light t))
 
 (use-package doom-modeline
       :defer t

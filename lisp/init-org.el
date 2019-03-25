@@ -20,7 +20,7 @@
 (defun zac/export-zacwood-md-pages ()
   (interactive)
   (let* ((project-dir "~/Developer/zacwood9.github.io/")
-	 (pages-dir (concat project-dir "_org/pages/"))
+	 (pages-dir (concat project-dir "_org/projects/"))
 	 (files (directory-files pages-dir)))
     (dolist (file files)
       (message file)
@@ -28,7 +28,7 @@
 	(if (string-suffix-p ".org" file-path)
 	    (with-current-buffer (find-file-noselect file-path)
 	      (with-current-buffer (org-md-export-as-markdown)
-		(write-file (concat project-dir (string-trim file nil ".org") ".md") nil))))))))
+		(write-file (concat project-dir "_projects/" (string-trim file nil ".org") ".md") nil))))))))
 
 (defun zac/publish-zacwood-me ()
   (interactive)
@@ -36,7 +36,7 @@
   (org-publish-project "zacwood.me.posts"))
 
 
-(setq zac/blog-post-header "#+OPTIONS: toc:nil num:nil\n#+BEGIN_EXPORT html\n---\nlayout: post\ntitle: \ntags: \ncategory: \n---\n#+END_EXPORT\n\n\n\n#+BEGIN_EXPORT html\n<!--description-->\n#+END_EXPORT\n")
+(setq zac/blog-post-header "#+OPTIONS: toc:nil num:nil\n#+BEGIN_EXPORT html\n---\nlayout: post\ntitle: \ntags: \n---\n#+END_EXPORT\n\n\n\n#+BEGIN_EXPORT html\n<!--description-->\n#+END_EXPORT\n")
 
 (defun zac/new-blog-post (name)
   (interactive "sPost name: ")
@@ -60,10 +60,6 @@
   (interactive)
   (find-file "~/iCloud/Documents/org/todos.org"))
 
-(cl-defmacro zac/dodir ((file dirname) &rest body)
-  `(dolist (,file (directory-files ,dirname))
-     ,@body))
-
 (global-set-key (kbd "C-c o t") #'zac/open-todos)
 
 (use-package org-bullets
@@ -75,5 +71,8 @@
 
 (setq org-babel-python-command "python3")
 (setq org-agenda-start-on-weekday nil)
+(setq org-archive-location "~/iCloud/Documents/org/archive.org::")
+
+(use-package org-pomodoro)
 
 (provide 'init-org)
