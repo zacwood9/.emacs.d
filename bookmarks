@@ -1,0 +1,45 @@
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*- 
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("uncool.y"
+ (filename . "/scp:zeus:/home/zwood2/cs440/project3/uncool.y")
+ (front-context-string . "%{\n#include <std")
+ (rear-context-string)
+ (position . 1))
+("zeus cs440"
+ (filename . "/scp:zeus:/home/zwood2/cs440/")
+ (front-context-string . "hw1\n  -rw-r--r--")
+ (rear-context-string . " Feb  6 09:47  ")
+ (position . 217))
+("SRCT GDrive"
+ (filename . "~/Google Drive/Mason SRCT/")
+ (front-context-string . "Icon\\015\n  drwxr")
+ (rear-context-string . " Apr 11 19:53  ")
+ (position . 503))
+("fish"
+ (filename . "~/.config/fish/")
+ (front-context-string . "config.fish\n  -r")
+ (rear-context-string . " Mar  1 16:54  ")
+ (position . 232))
+("Developer"
+ (filename . "~/Developer/")
+ (front-context-string . "SRCT\n  drwxr-xr-")
+ (rear-context-string . " Mar 23 22:30  ")
+ (position . 629))
+("schedules"
+ (filename . "~/Developer/SRCT/schedules/schedules/")
+ (front-context-string . ".DS_Store\n  -rw-")
+ (rear-context-string . " Mar 29 16:46  ")
+ (position . 268))
+("todos.org"
+ (filename . "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/org/todos.org")
+ (front-context-string . "#+TODO: TODO IN-")
+ (rear-context-string)
+ (position . 1))
+("School"
+ (filename . "~/School/")
+ (front-context-string . "55.pdf\n  -rw-r--")
+ (rear-context-string . " Jan  6 09:35  ")
+ (position . 308))
+)

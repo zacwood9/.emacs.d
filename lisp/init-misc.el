@@ -1,4 +1,5 @@
 (use-package eyebrowse
+  :defer t
   :config
   (eyebrowse-mode))
 
@@ -17,13 +18,6 @@
 (use-package docker
   :defer t
   :bind ("C-c d" . docker))
-
-(use-package all-the-icons-dired
-  :init(add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
-
-(use-package all-the-icons-ivy
-    :config
-  (all-the-icons-ivy-setup))
 
 (use-package discover
   :init
@@ -48,9 +42,11 @@
   :defer t)
 
 (use-package yasnippet
+  :defer t
   :config (yas-global-mode))
 
-(use-package yasnippet-snippets)
+(use-package yasnippet-snippets
+  :defer t)
 
 (use-package restclient
   :defer t
@@ -67,15 +63,17 @@
 (require 'flex)
 (add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode))
 
-(use-package elpy
-  :config
-  (elpy-enable)
-  (setq elpy-rpc-python-command "python3")
-  (setq doom-modeline-python-executable "python3"))
+;; (use-package elpy
+;;   :config
+;;   (elpy-enable)
+;;   (setq elpy-rpc-python-command "python3")
+;;   (setq doom-modeline-python-executable "python3"))
 
-(use-package ag)
+(use-package ag
+  :defer t)
 
 (use-package ess
+  :defer t
   :config
   (define-key company-active-map (kbd "M-h") 'company-show-doc-buffer))
 
@@ -84,6 +82,7 @@
  '(org-confirm-babel-evaluate nil))
 
 (use-package elfeed
+  :defer t
   :config
   (setq elfeed-feeds
       '("http://nullprogram.com/feed/"
@@ -97,6 +96,33 @@
 	"https://m.signalvnoise.com/rss"
 	"https://lukesmith.xyz/rss.xml"
 	"https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA"
-	"https://davedelong.com/feed.xml")))
+	"https://davedelong.com/feed.xml"
+	"https://nytrss.zacwood.me/opinion/bret%20stephens")))
+
+(global-set-key (kbd "C-x g") #'magit-status)
+
+(defun zac/new-math290 (file)
+  "Makes a new math290 file"
+  (interactive "fMake new MATH 290 tex document: ")
+  (find-file file)
+  (insert-file-contents "~/.emacs.d/templates/math290.tex")
+  (goto-char (point-min))
+  (re-search-forward "MATH 290 ")
+  (save-buffer))
+
+(defun buffer-string* (buffer)
+  "Returns the string of the contents of buffer"
+  (with-current-buffer buffer
+    (buffer-substring-no-properties (point-min) (point-max))))
+
+(defun flatmapcar (func seq)
+  "mapcar and remove all nil results"
+  (remove nil (mapcar func seq)))
+
+(defun copy-to-osx (text)
+  (let ((process-connection-type nil))
+    (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+      (process-send-string proc text)
+      (process-send-eof proc))))
 
 (provide 'init-misc)

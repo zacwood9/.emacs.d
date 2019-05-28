@@ -33,8 +33,8 @@
 
 ;;(use-package eglot)
 
-(use-package lsp-mode)
-(use-package company-lsp)
+(use-package lsp-mode :defer t)
+(use-package company-lsp :defer t)
 ;(use-package lsp-ui)
 
 (provide 'init-lsp)

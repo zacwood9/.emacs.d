@@ -50,9 +50,12 @@
 (global-set-key (kbd "C-c b p") #'zac/publish-zacwood-me)
 
 ;; add more languages for org-babel
-(org-babel-do-load-languages 'org-babel-load-languages '(
+(use-package org-mode
+  :defer t
+  :config
+  (org-babel-do-load-languages 'org-babel-load-languages '(
 							 (sql . t)
-							 ))
+							 )))
 
 (add-hook 'org-mode-hook #'visual-line-mode)
 

@@ -18,6 +18,7 @@
   (package-install 'use-package))
 
 (use-package exec-path-from-shell
+  :defer 0.1
   :if (memq window-system '(mac ns x))
   :config
   (exec-path-from-shell-initialize))

@@ -92,4 +92,10 @@
 (use-package esh-autosuggest
   :hook (eshell-mode . esh-autosuggest-mode))
 
+(if (file-exists-p "~/Developer/emacs-libvterm")
+    (progn
+      (add-to-list 'load-path "~/Developer/emacs-libvterm")
+      (require 'vterm))
+  (print "libvterm not installed!"))
+
 (provide 'init-eshell)

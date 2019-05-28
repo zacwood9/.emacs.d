@@ -26,7 +26,7 @@
 (global-set-key (kbd "C-c o c") 'zac/edit-emacs-config)
 (global-set-key (kbd "C-c o r") 'zac/new-restclient-buffer)
 (global-set-key (kbd "C-c o a") 'org-agenda)
-(global-set-key (kbd "C-c o s") 'ansi-term)
+(global-set-key (kbd "C-c o s") 'vterm)
 (global-set-key (kbd "C-\\") 'comment-or-uncomment-region)
 (global-set-key (kbd "C-c C-w C-d") 'zac/dired-new-eyeframe)
 (global-set-key (kbd "C-c C-w C-f") 'zac/find-file-new-eyeframe)
@@ -182,29 +182,11 @@
   (defun zac/open-file ()
     "Opens a file using the macOS \"open\" command."
     (interactive)
-    (shell-command (concat "open " (shell-quote-argument (buffer-file-name))))))
+    (shell-command (concat "open " (shell-quote-argument (buffer-file-name)))))
+  (defun zac/open-file* (file)
+    (interactive "FOpen file: ")
+    (shell-command (concat "open " (shell-quote-argument file)))))
 
-(defun zac/print ()
-  (interactive)
-  (ivy-read
-   "Choose printer: "
-   (zac//printers)
-   :action (lambda (printer)
-	     (print printer))))
-
-(defun zac//printers ()
-  (delete nil (mapcar
-   (lambda (str)
-     (let ((split (split-string str " ")))
-       (if (equal "printer" (first split))
-	   (concat (second split) " " (string-remove-suffix "." (fourth split))))))
-   (split-string (shell-command-to-string "/usr/bin/lpstat -p -d") "\n" t))))
-
-(defun zac/list-printers ()
-  (interactive)
-  (switch-to-buffer (generate-new-buffer "printers"))
-  (insert (string-join (zac//printers) "\n"))
-  (view-mode))
 
 (defvar zac/downloads-directory (expand-file-name "~/Downloads/"))
 
@@ -213,27 +195,58 @@
   (interactive)
   (let ((current-directory default-directory)
 	(default-directory zac/downloads-directory))
-    (call-interactively 'zac//move-from-downloads-helper)))
+    (call-interactively (lambda (file)
+			  (interactive "FChoose file: ")
+			  (rename-file file (concat current-directory (file-name-nondirectory file)))))))
 
-(defun zac//move-from-downloads-helper (file)
-  (interactive "FChoose file: ")
-  (rename-file file (concat current-directory (file-name-nondirectory file))))
-
-(defun read-lines (file-path)
+(defun file-lines (file-path)
   (with-temp-buffer
     (insert-file-contents file-path)
     (split-string (buffer-string) "\n" t)))
 
+(defun buffer-lines (buffer)
+  (split-string (buffer-string* buffer) "\n" t))
+
+(defun buffer-string* (buffer)
+  "Returns the string of the contents of buffer"
+  (with-current-buffer buffer
+    (buffer-substring-no-properties (point-min) (point-max))))
+
+(defun flatmapcar (func seq)
+  "mapcar and remove all nil results"
+  (remove nil (mapcar func seq)))
+
+(if *is-a-mac*
+    (defun copy-to-osx (text)
+      "Copies TEXT to macOS clipboard."
+      (let ((process-connection-type nil))
+	(let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+	  (process-send-string proc text)
+	  (process-send-eof proc)))))
+
+(defun strings-matching-regexp ()
+  (interactive)
+  (setq current-prefix-arg '(1))
+  (call-interactively 'occur))
+
+(defalias 'strings-matching-p 'lines-matching-p)
+
 (defun lines-matching-p (regexp lines)
-  (delete nil
-	  (mapcar (lambda (line)
-		    (if (string-match-p regexp line)
-			line))
-		  lines)))
+  (flatmapcar (lambda (line)
+		(if (string-match-p regexp line)
+		    line))
+	      lines))
 
 (defun zac/copy-file-name ()
   (interactive)
-  (shell-command (concat "echo -n '" buffer-file-name "' | pbcopy")))
+  (copy-to-osx (buffer-file-name)))
 
+(defun zac/project-controllers ()
+  (interactive)
+  (let* ((cdir (concat (projectile-project-root) "app/controllers"))
+	 (files (directory-files cdir t)))
+    (find-file (ivy-completing-read "Open controller:" files))))
+
+(global-set-key (kbd "C-c c") #'compile)
 
 (provide 'zac-misc)

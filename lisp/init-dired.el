@@ -1,7 +1,6 @@
-(use-package neotree
+(use-package dired-narrow
   :config
-  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
-  (setq neo-mode-line-type 'none))
+  (bind-key "N" #'dired-narrow dired-mode-map))
 
 (add-hook 'dired-mode-hook (lambda () (dired-hide-details-mode)))
 
@@ -10,5 +9,6 @@
   (interactive "MList lines matching regexp: ")
   (require 'dired)
   (multi-occur (mapcar 'find-file (dired-get-marked-files)) string))
+
 
 (provide 'init-dired)

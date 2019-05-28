@@ -14,16 +14,11 @@
   ;; enable typescript-tslint checker
   (flycheck-add-mode 'typescript-tslint 'web-mode))
 
-(use-package js2-mode)
-
-(use-package rjsx-mode
-  :mode(("\\.js\\'" . rjsx-mode)
-	("\\.jsx\\'" . rjsx-mode))
-  :init
-  (add-hook 'rjsx-mode-hook 'prettier-js-mode)
-  (add-hook 'rjsx-mode-hook 'tide-setup))
+(use-package js2-mode
+  :defer 1)
 
 (use-package tide
+  :defer 1
   :mode(("\\.ts\\'" . typescript-mode))
   :config
   (add-hook 'typescript-mode-hook #'tide-setup)
@@ -31,20 +26,40 @@
   (add-hook 'tide-mode-hook
 	    (lambda ()
 	      (flycheck-mode 1)
-	      (setq flycheck-check-syntax-automatically '(save mode-enabled))
-	      (global-set-key (kbd "C-;") #'zac/insert-comment))))
+	      (setq flycheck-check-syntax-automatically '(save mode-enabled)))))
 
 (use-package prettier-js
-  :config
-  (setq prettier-js-args '(
-                           "--trailing-comma" "es5"
-                           "--single-quote" "true"
-                           "--print-width" "180"
-                           "--tab-width" "4"
-                           "--use-tabs" "false"
-                           "--jsx-bracket-same-line" "true"
-                           )))
+  :defer 1)
 
-(use-package vue-mode)
+(use-package rjsx-mode
+  :after tide
+  :after prettier-js
+  :mode(("\\.js\\'" . rjsx-mode)
+	("\\.jsx\\'" . rjsx-mode))
+  :init
+  (add-hook 'rjsx-mode-hook 'prettier-js-mode)
+  (add-hook 'rjsx-mode-hook 'tide-setup))
+
+;; (use-package vue-mode
+;;   :defer t)
+
+(defun camel-to-kebab (str)
+  (let ((case-fold-search nil))
+    (apply 'concat (cl-loop for c across str
+			    if (char-equal c (upcase c))
+			    collect (concat "-" (string (downcase c)))
+			    else collect (string c)))))
+
+(defun json-to-args (json)
+  (mapcar
+   (lambda (obj)
+     (list
+      (concat "--" (camel-to-kebab (symbol-name (car obj))))
+      (if (eq t (cdr obj))
+	  "true"
+	(if (numberp (cdr obj))
+	    (number-to-string (cdr obj))
+	  (cdr obj)))))
+   json))
 
 (provide 'init-js)

@@ -1,7 +1,3 @@
-(defun zac/neotree-projectile-root ()
-  (interactive)
-  (neotree-dir (projectile-project-root)))
-
 (use-package projectile
   :init
   (setq projectile-keymap-prefix (kbd "C-c p"))
@@ -10,7 +6,6 @@
   (setq projectile-completion-system 'ivy)
   (setq projectile-enable-caching t)
   (setq projectile-mode-line "Projectile")
-  (setq remote-file-name-inhibit-cache nil)
-  (define-key projectile-mode-map (kbd "C-c p t") 'zac/neotree-projectile-root))
+  (setq remote-file-name-inhibit-cache nil))
 
 (provide 'init-projectile)
