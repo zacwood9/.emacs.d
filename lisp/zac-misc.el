@@ -26,7 +26,7 @@
 (global-set-key (kbd "C-c o c") 'zac/edit-emacs-config)
 (global-set-key (kbd "C-c o r") 'zac/new-restclient-buffer)
 (global-set-key (kbd "C-c o a") 'org-agenda)
-(global-set-key (kbd "C-c o s") 'vterm)
+(global-set-key (kbd "C-c o s") 'eshell)
 (global-set-key (kbd "C-\\") 'comment-or-uncomment-region)
 (global-set-key (kbd "C-c C-w C-d") 'zac/dired-new-eyeframe)
 (global-set-key (kbd "C-c C-w C-f") 'zac/find-file-new-eyeframe)
@@ -162,6 +162,7 @@
 (global-hl-line-mode 1) ; highlight current line
 (eldoc-mode 1) ; enable docs in minibuffer
 (delete-selection-mode 1)
+(setq-default indent-tabs-mode nil)
 
 ;; store all backups in a single directory 
 (setq backup-directory-alist
@@ -178,7 +179,7 @@
   (setq mac-command-modifier 'meta) ; set cmd to meta
   (setq mac-option-modifier nil)
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)) ; configure title bar
-  (add-to-list 'default-frame-alist '(ns-appearance . 'nil))
+  (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (defun zac/open-file ()
     "Opens a file using the macOS \"open\" command."
     (interactive)

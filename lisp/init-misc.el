@@ -1,5 +1,6 @@
+(use-package ag :ensure t)
+
 (use-package eyebrowse
-  :defer t
   :config
   (eyebrowse-mode))
 
@@ -12,11 +13,9 @@
   (smartparens-global-mode))
 
 (use-package css-eldoc
-  :defer t
   :init(css-eldoc-enable))
 
 (use-package docker
-  :defer t
   :bind ("C-c d" . docker))
 
 (use-package discover
@@ -42,11 +41,9 @@
   :defer t)
 
 (use-package yasnippet
-  :defer t
   :config (yas-global-mode))
 
-(use-package yasnippet-snippets
-  :defer t)
+(use-package yasnippet-snippets)
 
 (use-package restclient
   :defer t
@@ -60,22 +57,12 @@
 
 (use-package try)
 
-(require 'flex)
-(add-to-list 'auto-mode-alist '("\\.l\\'" . flex-mode))
 
 ;; (use-package elpy
 ;;   :config
 ;;   (elpy-enable)
 ;;   (setq elpy-rpc-python-command "python3")
 ;;   (setq doom-modeline-python-executable "python3"))
-
-(use-package ag
-  :defer t)
-
-(use-package ess
-  :defer t
-  :config
-  (define-key company-active-map (kbd "M-h") 'company-show-doc-buffer))
 
 (custom-set-variables
  '(org-babel-load-languages (quote ((emacs-lisp . t) (R . t))))
@@ -124,5 +111,53 @@
     (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
       (process-send-string proc text)
       (process-send-eof proc))))
+
+
+(defstruct proc name pwd cmd)
+
+(setq proc-list (list (make-proc
+                       :name "fenix"
+                       :pwd  "~/Developer/fenix"
+                       :cmd  "foreman s")
+                      (make-proc
+                       :name "fenixjs-tests"
+                       :pwd  "~/Developer/fenixjs"
+                       :cmd  "yarn test --watch")
+                      (make-proc
+                       :name "fenixjs-rbac"
+                       :pwd  "~/Developer/fenixjs"
+                       :cmd  "yarn storybook")
+                      (make-proc
+                       :name "fenix-console"
+                       :pwd  "~/Developer/fenix"
+                       :cmd  "rails c")))
+
+(defun proc-names ()
+  (mapcar (lambda (proc)
+            (proc-name proc))
+   proc-list))
+
+(defun zac/start-proc ()
+  (interactive)
+  (let ((name (ivy-completing-read "Start proc: " (proc-names))))
+    (when-let ((proc (seq-find (lambda (proc)
+                                 (string-equal (proc-name proc) name))
+                               proc-list)))
+      (start-proc proc))))
+
+(defun start-proc (proc)
+  (ansi-term "/bin/bash")
+  (rename-buffer (format "*%s*" (proc-name proc)))
+  (term-line-mode)
+  (insert (format "cd %s" (proc-pwd proc)))
+  (term-send-input)
+  (insert (proc-cmd proc))
+  (term-send-input)
+  (term-char-mode))
+
+(cl-defun zac/define-proc (&key name pwd cmd)
+  (let ((new-proc (make-proc :name name :pwd pwd :cmd cmd :active nil)))
+    (add-to-list 'proc-list new-proc)))
+
 
 (provide 'init-misc)
