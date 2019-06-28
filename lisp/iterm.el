@@ -1,7 +1,7 @@
 (require 'applescript)
 
 (defmacro iterm (form)
-  `(applescript-do (:tell iterm ,form)))
+  `(applescript-do (:tell "application \"iTerm\"" ,form)))
 
 (defun iterm-activate ()
   (interactive)

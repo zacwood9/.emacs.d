@@ -13,7 +13,7 @@
 (defmacro applescript-do (form)
   `(with-temp-buffer
      (applescript--eval-form (quote ,form))
-     (do-applescript (print (buffer-string)))))
+     (do-applescript (buffer-string))))
 
 
 (provide 'applescript)
