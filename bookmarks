@@ -1,8 +1,13 @@
-;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*- 
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("uncool.y"
+(("org-capture-last-stored"
+ (filename . "~/Developer/notes.org")
+ (front-context-string . "** TODO \n   [201")
+ (rear-context-string . ".scss::li%20{]]\n")
+ (position . 516))
+("uncool.y"
  (filename . "/scp:zeus:/home/zwood2/cs440/project3/uncool.y")
  (front-context-string . "%{\n#include <std")
  (rear-context-string)

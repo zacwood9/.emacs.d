@@ -33,8 +33,13 @@
 
 ;;(use-package eglot)
 
-(use-package lsp-mode :defer t)
-(use-package company-lsp :defer t)
-;(use-package lsp-ui)
+;; (use-package lsp-mode
+;;   :hook (rjsx-mode . lsp))
+
+;; (use-package company-lsp)
+
+;; (use-package lsp-ui
+;;   :config
+;;   (add-hook 'lsp-ui-mode (lambda () (lsp-ui-mode -1))))
 
 (provide 'init-lsp)

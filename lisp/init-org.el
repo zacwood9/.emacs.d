@@ -49,32 +49,24 @@
 (global-set-key (kbd "C-c b n") #'zac/new-blog-post)
 (global-set-key (kbd "C-c b p") #'zac/publish-zacwood-me)
 
-;; add more languages for org-babel
-(use-package org-mode
-  :defer t
-  :config
-  (org-babel-do-load-languages 'org-babel-load-languages '(
-							 (sql . t)
-							 )))
-
 (add-hook 'org-mode-hook #'visual-line-mode)
+(setq org-default-notes-file "~/Developer/notes.org")
 
 (defun zac/open-todos ()
   (interactive)
-  (find-file "~/iCloud/Documents/org/todos.org"))
+  (find-file "~/Developer/notes.org"))
 
 (global-set-key (kbd "C-c o t") #'zac/open-todos)
 
 (use-package org-bullets
   :config (add-hook 'org-mode-hook 'org-bullets-mode))
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((python . t)))
-
 (setq org-babel-python-command "python3")
 (setq org-agenda-start-on-weekday nil)
-(setq org-archive-location "~/iCloud/Documents/org/archive.org::")
+(setq org-archive-location "~/Developer/archive.org::")
+
+(setq org-todo-keywords
+      '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
 
 (use-package org-pomodoro)
 

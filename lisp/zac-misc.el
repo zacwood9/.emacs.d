@@ -250,4 +250,13 @@
 
 (global-set-key (kbd "C-c c") #'compile)
 
+(defun goto-random-line ()
+  "Goto a random line in the buffer."
+  (interactive)
+  (push-mark)
+  (goto-char (point-min))
+  (forward-line (random (count-lines (point-min) (point-max)))))
+
+(global-set-key (kbd "M-g M-r") #'goto-random-line)
+
 (provide 'zac-misc)

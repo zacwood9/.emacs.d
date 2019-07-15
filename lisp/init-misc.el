@@ -116,26 +116,32 @@
 (defstruct proc name pwd cmd)
 
 (setq proc-list (list (make-proc
-                       :name "fenix"
+                       :name "fenix: server"
                        :pwd  "~/Developer/fenix"
-                       :cmd  "foreman s")
+                       :cmd  "foreman s -m web=1,webpack=1")
                       (make-proc
-                       :name "fenixjs-tests"
-                       :pwd  "~/Developer/fenixjs"
-                       :cmd  "yarn test --watch")
+                       :name "fenix: console"
+                       :pwd  "~/Developer/fenix"
+                       :cmd  "rails c")
                       (make-proc
-                       :name "fenixjs-rbac"
+                       :name "fenix: rspec"
+                       :pwd  "~/Developer/fenix"
+                       :cmd  "rspec")
+                      (make-proc
+                       :name "fenix: mocha"
+                       :pwd  "~/Developer/fenix"
+                       :cmd  "yarn test")
+                      (make-proc
+                       :name "fenixjs: storybook"
                        :pwd  "~/Developer/fenixjs"
                        :cmd  "yarn storybook")
                       (make-proc
-                       :name "fenix-console"
-                       :pwd  "~/Developer/fenix"
-                       :cmd  "rails c")))
+                       :name "fenixjs: test"
+                       :pwd  "~/Developer/fenixjs"
+                       :cmd  "yarn test --watch")))
 
 (defun proc-names ()
-  (mapcar (lambda (proc)
-            (proc-name proc))
-   proc-list))
+  (mapcar #'proc-name proc-list))
 
 (defun zac/start-proc ()
   (interactive)
@@ -145,19 +151,19 @@
                                proc-list)))
       (start-proc proc))))
 
+(require 'iterm)
+
 (defun start-proc (proc)
-  (ansi-term "/bin/bash")
-  (rename-buffer (format "*%s*" (proc-name proc)))
-  (term-line-mode)
-  (insert (format "cd %s" (proc-pwd proc)))
-  (term-send-input)
-  (insert (proc-cmd proc))
-  (term-send-input)
-  (term-char-mode))
+  (iterm-new-tab (proc-name proc))
+  (iterm-set-name (proc-name proc))
+  (iterm-run-command (format "cd %s" (proc-pwd proc)))
+  (iterm-run-command (proc-cmd proc)))
 
 (cl-defun zac/define-proc (&key name pwd cmd)
-  (let ((new-proc (make-proc :name name :pwd pwd :cmd cmd :active nil)))
+  (let ((new-proc (make-proc :name name :pwd pwd :cmd cmd)))
     (add-to-list 'proc-list new-proc)))
+
+(global-set-key (kbd "C-c i") #'iterm-activate)
 
 
 (provide 'init-misc)
