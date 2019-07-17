@@ -1,5 +1,3 @@
-(use-package ag :ensure t)
-
 (use-package eyebrowse
   :config
   (eyebrowse-mode))
@@ -164,6 +162,10 @@
     (add-to-list 'proc-list new-proc)))
 
 (global-set-key (kbd "C-c i") #'iterm-activate)
+
+
+(use-package iedit)
+
 
 
 (provide 'init-misc)

@@ -1,6 +1,5 @@
 ;; packages
 (use-package magit
-  :defer 0.5
   :config
   (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
   ;; full screen magit-status
