@@ -45,7 +45,7 @@ end tell"))
 
 (defun iterm-open-dir (dir)
   (interactive "DOpen iTerm tab in directory: ")
-  (iterm-new-tab)
+  (iterm-new-tab t)
   (iterm-run-command (format "cd %s" dir)))
 
 (provide 'iterm)
